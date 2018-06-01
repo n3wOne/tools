@@ -1,0 +1,146 @@
+<!doctype html>
+<html>
+<head>
+<script src="jquery-3.2.1.min.js"></script>
+<meta charset="utf-8">
+<title>Документ без названия</title>
+</head>
+
+<body>
+<p><button id="GO">Однодневки</button><button id="GO2">Многодневки</button></p>
+<textarea rows="10" cols ="50" id="tex"></textarea>
+<div id="buf"></div>
+<script>
+$('body').on('click',"#GO", go);
+$('body').on('click',"#GO2", go2);
+
+function go2()
+{
+var buf = $('#buf');
+var tex = $('#tex').val();
+buf.append(tex);
+var arr={};	
+var l = $('#buf p:first').html();
+var res = l.match(/«.*»/gi); arr.title=res[0]; 
+res = l.match(/♦.*\./gi); res ? arr.date=res[0] : arr.date="";  
+res = l.match(/(?<=<em>).*(?=<\/em>)/gi); arr.route=res[0];
+var pr = buf.text().match(/\d+(?=\s+руб.)/gi);
+console.log(pr);
+if(pr)
+{
+arr.price=pr[0]+"/"+pr[1];
+}
+else
+{
+arr.price = "?";
+}
+//arr.price=pr[1];
+console.log(arr);
+
+var blkstr = [];
+$.each(arr, function(idx2,val2) {                    
+  var str = '"'+idx2 + '" : "' + val2+'"';
+  blkstr.push(str);
+});
+var txt = blkstr.join(", ");
+buf.append("<p>{loadposition bronmodule}</p>")
+buf.append("<p>{"+txt+"}</p>");
+console.log(blkstr.join(", "));
+
+
+$('span').replaceWith(function(){return $(this).html();});
+$('td p').replaceWith(function(){return $(this).html();});
+
+$('td').each(function(){
+	var tt = $(this).html();
+	$(this).removeAttr('data-mce-style');
+	$(this).removeAttr('valign');
+	tt=tt.replace(/<br>/g,"")
+	tt=tt.replace(/(?<=>)\s+(?=<)/g,"");
+	$(this).html(tt);
+});
+$('table').each(function(){$(this).removeAttr('data-mce-style');
+	$(this).removeAttr('align');
+	$(this).removeAttr('width'); 
+	$(this).attr('border-collapse','collapse'); 
+	$(this).removeAttr('valign');
+});
+
+$('tr').each(function(){
+	$(this).removeAttr('data-mce-style');
+	$('td:eq(0)',this).each(function(){$(this).prop('width', 100);});
+	$('td:eq(1)',this).each(function(){$(this).prop('width', 600);});
+	});
+var t = $('div#buf').html();
+//$('restext').val(t);
+
+
+t = t.replace(/&nbsp;/g," ");
+t = t.replace(/ +/g," ");
+t = t.replace(/(?<=>+)\s+(?=<)/g,"");
+t = t.replace(/<\/strong><strong>/g," ");
+t = t.replace(/<\/em>\s+<em>/g," ");
+t = t.replace(/[\f\n\t\r]/g,"");
+t = t.replace(/ +/g," ");
+t = t.replace(/<\/tr>/g,"</tr>\n");
+t = t.replace(/<tr>/g,"<tr>\n");
+t = t.replace(/<\/td>/g,"</td>\n");
+t = t.replace(/<td/g,"\t<td");
+// t = t.replace(new RegExp('</p>','g'),"</p>");
+t = t.replace(new RegExp('<p>','g'),"\n<p>");
+t = t.replace(new RegExp('<br>','g'),"<br>\n");
+t = t.replace(new RegExp('<table','g'),"\n<table");
+// t = t.replace(/<\/td><td>/g,"</td>\n<td>");
+// t = t.replace(/<\/td><\/tr>/g,"</td>\n</tr>");
+// t = t.replace(/<\/tr><tr>/g,"</tr>\n<tr>");
+// t = t.replace(/<tr><td/g,"<tr>\n\t<td");
+
+
+
+
+// t = t.replace(/<p>/g,'');
+// t = t.replace(/<\/p>/g,'');
+//console.log(t)
+buf.html(t);
+}
+
+
+
+function go()
+{
+	var buf = $('#buf');
+	var tex = $('#tex').val();
+	buf.append(tex);
+
+	$('span').replaceWith(function(){return $(this).html();});
+	$('td p').replaceWith(function(){return $(this).html();});
+
+	$('td').each(function(){$(this).removeAttr('data-mce-style');$(this).removeAttr('valign');});
+	$('table').each(function(){$(this).removeAttr('data-mce-style');$(this).removeAttr('valign');});
+
+	$('tr').each(function(){
+		$(this).removeAttr('data-mce-style');
+		$('td:eq(0)',this).each(function(){$(this).prop('width', 80);});
+		$('td:eq(1)',this).each(function(){$(this).prop('width', 142);});
+		$('td:eq(2)',this).each(function(){$(this).prop('width', 500);});
+		});
+	var t = $('div#buf').html();
+	//$('restext').val(t);
+
+
+	t = t.replace(/&nbsp;/g," ");
+	t = t.replace(/ +/g," ");
+	t = t.replace(/(?<=>+)\s+(?=<)/g,"");
+	t = t.replace(/<\/strong><strong>/g," ");
+	t = t.replace(/<\/em>\s+<em>/g," ");
+	t = t.replace(/[\f\n\t\r]/g,"");
+	t = t.replace(/ +/g," ");
+
+	// t = t.replace(/<p>/g,'');
+	// t = t.replace(/<\/p>/g,'');
+	console.log(t)
+	buf.html(t);
+}
+  </script>
+</body>
+</html>

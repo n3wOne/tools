@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+<p><button id="go">GO</button></p>
+<p><textarea cols="40" rows="30" id="one">1
+2
+</textarea>
+<textarea cols="40" rows="30" id="two">1
+2
+3
+4</textarea>
+<textarea cols="40" rows="30" id="result"></textarea>
+</p>
+
+<script>
+var button = document.getElementById('go');
+
+  button.onclick = function() {
+   // alert( 'Спасибо' );
+var text1 = document.getElementById('one');
+var text2 = document.getElementById('two');
+
+var masone = text1.value.split('\n');
+var mastwo = text2.value.split('\n');
+
+Array.prototype.diff = function(a) {
+    return this.filter(
+    	function(i){
+    	return a.indexOf(i) < 0;
+    	});
+};
+
+var mas3 = document.getElementById('result');
+var result = mastwo.diff(masone);
+var re = result.toString();
+mas3.value = re.replace(/,/g,'\n');
+console.log(re);
+
+};
+</script>
+</body>
+</html>
